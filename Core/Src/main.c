@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ModBusRTU.h"
+//#include "stm32h4xx_hal_msp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +50,9 @@ DMA_HandleTypeDef hdma_usart2_rx;
 /* USER CODE BEGIN PV */
 ModbusHandleTypedef hmodbus;
 u16u8_t registerFrame[200];
+uint8_t SPIRx[10];
+uint8_t SPITx[10];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,8 +61,12 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM16_Init(void);
-/* USER CODE BEGIN PFP */
 
+
+/* USER CODE BEGIN PFP */
+void SPITxRx_Setup();
+void SPITxRx_readIO();
+void SPITxRx_writeIO();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -105,6 +113,7 @@ int main(void)
   hmodbus.slaveAddress = 0x15;
   hmodbus.RegisterSize =200;
   Modbus_init(&hmodbus, registerFrame);
+  SPITxRx_Setup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,6 +124,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  Modbus_Protocal_Worker();
+	  SPITxRx_readIO();
   }
   /* USER CODE END 3 */
 }
@@ -311,7 +321,31 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void SPITxRx_Setup()
+{
+//CS pulse
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 0); // CS Select
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 1); // CS deSelect
+	HAL_Delay(1);
+}
 
+void SPITxRx_readIO()
+{
+	if(HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_2))
+	{
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 0); // CS Select
+		SPITx[0] = 0b01000001;
+		SPITx[1] = 0x12;
+		SPITx[2] = 0;
+		HAL_SPI_TransmitReceive_IT(&hspi3, SPITx, SPIRx, 3);
+	}
+}
+
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, 1); //CS dnSelect
+}
 /* USER CODE END 4 */
 
 /**
