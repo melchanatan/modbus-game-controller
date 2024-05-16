@@ -1,0 +1,19 @@
+!SESSION 2567-05-15 23:08:21.509 -----------------------------------------------
+eclipse.buildId=Version 1.13.2
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  C:\Users\User\STM32CubeIDE\workspace_1.13.2\click-counter-game\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\User\STM32CubeIDE\workspace_1.13.2\click-counter-game\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2567-05-15 23:08:30.639
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2567-05-15 23:08:30.645
+!MESSAGE Log4j2 initialized with config file C:\Users\User\STM32CubeIDE\workspace_1.13.2\click-counter-game\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2567-05-15 23:08:33.112
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.jobs 2 2 2024-05-15 23:08:41.342
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ui.internal.Workbench$39
